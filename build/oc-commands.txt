@@ -1,0 +1,14 @@
+#For Jdk11 with appuser 
+oc create -f buildconfig-jdk11-appuser.yaml
+oc create imagestream tomcat-appuser-jdk11
+oc start-build tomcat-appuser-jdk11 --from-dir=./ --follow
+oc get imagestream tomcat-appuser-jdk11
+
+# To Delete the streams
+oc delete imagestream tomcat-jdk8
+oc delete -f buildconfig.yaml
+
+
+
+
+

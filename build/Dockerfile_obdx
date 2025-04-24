@@ -1,0 +1,43 @@
+FROM karthickconnects/base-tomcat:latest
+
+USER appuser
+
+#RUN rm -rf ${CATALINA_HOME}/webapps/*.war
+
+COPY ./deployable/wars/digx-shared-libs.war ${CATALINA_HOME}/webapps/
+COPY ./deployable/wars/digx-admin.war ${CATALINA_HOME}/webapps/
+COPY ./deployable/wars/digx-infra.war ${CATALINA_HOME}/webapps/
+COPY ./deployable/wars/digx-common.war ${CATALINA_HOME}/webapps/
+COPY ./deployable/wars/digx-sms.war ${CATALINA_HOME}/webapps/
+COPY ./deployable/wars/digx-tradefinance.war ${CATALINA_HOME}/webapps/
+COPY ./deployable/wars/digx-corporateloan.war ${CATALINA_HOME}/webapps/
+COPY ./deployable/wars/digx-approval.war ${CATALINA_HOME}/webapps/
+COPY ./deployable/wars/digx-em.war ${CATALINA_HOME}/webapps/
+COPY ./deployable/wars/digx-coherence.war ${CATALINA_HOME}/webapps/
+COPY ./deployable/wars/digx-finlimit.war ${CATALINA_HOME}/webapps/
+
+COPY ./deployable/jars/activemq-client-5.19.0.jar ${CATALINA_HOME}/lib/
+COPY ./deployable/jars/com.ofss.cz.digx.infra-22.1.0.0.0-SNAPSHOT.jar ${CATALINA_HOME}/lib/
+COPY ./deployable/jars/com.ofss.digx.cz.utils.tomcat.jar ${CATALINA_HOME}/lib/
+COPY ./deployable/jars/com.ofss.digx.utils.tomcat.jar ${CATALINA_HOME}/lib/
+COPY ./deployable/jars/hawtbuf-1.11.jar ${CATALINA_HOME}/lib/
+COPY ./deployable/jars/HikariCP-3.4.5.jar ${CATALINA_HOME}/lib/
+COPY ./deployable/jars/ojdbc7.jar ${CATALINA_HOME}/lib/
+COPY ./deployable/jars/slf4j-api-2.0.7.jar ${CATALINA_HOME}/lib/
+COPY ./deployable/jars/CustomDataSourceFactory.jar ${CATALINA_HOME}/lib/
+
+COPY ./configuration/server.xml ${CATALINA_HOME}/conf/
+COPY ./configuration/catalina.properties ${CATALINA_HOME}/conf/
+COPY ./configuration/context.xml ${CATALINA_HOME}/conf/
+COPY ./configuration/logging.properties ${CATALINA_HOME}/conf/
+COPY ./configuration/tomcat-users.xml ${CATALINA_HOME}/conf/
+COPY ./configuration/logback.xml ${CATALINA_HOME}/conf/
+COPY ./configuration/entrypoint.sh /entrypoint.sh
+
+
+# Expose the necessary port
+EXPOSE 8080
+
+COPY startup.sh /opt/startup.sh
+
+ENTRYPOINT /opt/startup.sh

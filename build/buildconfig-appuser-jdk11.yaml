@@ -1,0 +1,58 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+    name: tomcat-appuser-jdk11
+spec:
+  runPolicy: Serial
+  source:
+    dockerfile: |
+      # Use a minimal image as parent
+      FROM adoptopenjdk/openjdk11:jdk-11.0.16.1_1
+
+      # Environment variables
+      ENV TOMCAT_MAJOR=9 \
+          TOMCAT_VERSION=9.0.104 \
+          CATALINA_HOME=/opt/tomcat
+
+      # init
+      RUN apt -y update && \
+          apt -y upgrade && \
+          apt install -y curl 
+
+      RUN mkdir -p /opt
+
+      # install tomcat
+      RUN curl -jkSL -o /tmp/apache-tomcat.tar.gz http://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz && \
+          gunzip /tmp/apache-tomcat.tar.gz && \
+          tar -C /opt -xf /tmp/apache-tomcat.tar && \
+          ln -s /opt/apache-tomcat-$TOMCAT_VERSION $CATALINA_HOME
+
+      # cleanup
+      RUN rm -rf /tmp/* /var/cache/apk/*
+
+      # RUN addgroup -g root -S appuser
+      RUN useradd -ms /bin/bash appuser
+      RUN adduser appuser root
+
+      RUN chown -R appuser /opt
+
+      RUN chmod -R g+rwx /opt/startup.sh /opt/apache-tomcat-$TOMCAT_VERSION 
+
+      WORKDIR $CATALINA_HOME
+    
+       USER appuser
+
+      EXPOSE 8080
+
+      COPY startup.sh /opt/startup.sh
+
+      ENTRYPOINT /opt/startup.sh
+
+  strategy:
+    type: Docker
+    dockerStrategy:
+      noCache: false
+  output:
+    to:
+      kind: ImageStreamTag
+      name: "tomcat-appuser-jdk11:9.0.104"

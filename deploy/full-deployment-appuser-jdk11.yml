@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tomcat-appuser-jdk11-sample
+  labels:
+    app: tomcat-appuser-jdk11-sample
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tomcat-appuser-jdk11-sample
+  template:
+    metadata:
+      labels:
+        app: tomcat-appuser-jdk11-sample
+    spec:
+      containers:
+        - name: tomcat-appuser-jdk11-sample
+          image: "default-route-openshift-image-registry.apps.rm3.7wse.p1.openshiftapps.com/karthickconnects-dev/tomcat-appuser-jdk11:9.0.104"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: serve
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tomcat-appuser-jdk11-sample-svc
+  labels:
+    app: tomcat-appuser-jdk11-sample-svc
+spec:
+  type: ClusterIP
+  ports:
+  - name: tomcat-appuser-jdk11-sample
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: tomcat-appuser-jdk11-sample
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: tomcat-appuser-jdk11-sample-route
+  labels:
+    app: tomcat-appuser-jdk11-sample-svc
+spec:
+  # hostname: foo.apps.CLUSTER.ccs.ornl.gov
+  port:
+    targetPort: tomcat-appuser-jdk11-sample
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: tomcat-appuser-jdk11-sample-svc
+    weight: 100
+  wildcardPolicy: None

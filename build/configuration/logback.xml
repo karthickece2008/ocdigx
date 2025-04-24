@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<logger name="org.apache.catalina.core" level="OFF" />
+	<logger name="com.zaxxer.hikari.pool.PoolBase" level="DEBUG"/>
+    <logger name="com.zaxxer.hikari.pool.HikariPool" level="DEBUG"/>
+    <logger name="com.zaxxer.hikari.HikariDataSource" level="DEBUG"/>
+    <logger name="com.ofss.fc.infra.das.orm.eclipselink.OBPPersistenceProvider" level="DEBUG"/>	
+ <logger name="com.netflix.discovery.DiscoveryClient" level="OFF">
+
+        <appender-ref ref="STDOUT"/>
+    </logger>
+	
+	<property name="LOG_DIR" value="/opt/app/log" />
+	
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%date{dd MMM yyyy;HH:mm:ss.SSS} [%thread] %X{ecid} %-5level %logger{100} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/obdx.log</file>
+         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- daily rollover -->
+      <fileNamePattern>${LOG_DIR}/obdx.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+      <!-- keep 2 days' worth of history capped at 100MB total size -->
+      <maxHistory>2</maxHistory>
+      <totalSizeCap>100MB</totalSizeCap>
+
+    </rollingPolicy>
+        <encoder>
+            <pattern>%date{dd MMM yyyy;HH:mm:ss.SSS} [%thread] %X{ecid} %-5level %logger{100} - %msg%n</pattern>
+        </encoder>
+ 	
+    </appender>
+    
+  
+
+    <root level="DEBUG">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
