@@ -1,58 +1,60 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tomcat-appuser-jdk11-sample
+  name: ocdigx-app
   labels:
-    app: tomcat-appuser-jdk11-sample
+    app: ocdigx-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: tomcat-appuser-jdk11-sample
+      app: ocdigx-app
   template:
     metadata:
       labels:
-        app: tomcat-appuser-jdk11-sample
+        app: ocdigx-app
     spec:
       containers:
-        - name: tomcat-appuser-jdk11-sample
-          image: "default-route-openshift-image-registry.apps.rm3.7wse.p1.openshiftapps.com/karthickconnects-dev/tomcat-appuser-jdk11:9.0.104"
+        - name: ocdigx-app
+          image: "karthickconnects/ocdigx:22.2.5"
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
               name: serve
+      imagePullSecrets:
+        - name: karthickconnects
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: tomcat-appuser-jdk11-sample-svc
+  name: ocdigx-app-svc
   labels:
-    app: tomcat-appuser-jdk11-sample-svc
+    app: ocdigx-app-svc
 spec:
   type: ClusterIP
   ports:
-  - name: tomcat-appuser-jdk11-sample
+  - name: ocdigx-app
     port: 8080
     protocol: TCP
     targetPort: 8080
   selector:
-    app: tomcat-appuser-jdk11-sample
+    app: ocdigx-app
 ---
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: tomcat-appuser-jdk11-sample-route
+  name: ocdigx-app-route
   labels:
-    app: tomcat-appuser-jdk11-sample-svc
+    app: ocdigx-app-svc
 spec:
   # hostname: foo.apps.CLUSTER.ccs.ornl.gov
   port:
-    targetPort: tomcat-appuser-jdk11-sample
+    targetPort: ocdigx-app
   tls:
     insecureEdgeTerminationPolicy: Redirect
     termination: edge
   to:
     kind: Service
-    name: tomcat-appuser-jdk11-sample-svc
+    name: ocdigx-app-svc
     weight: 100
   wildcardPolicy: None
