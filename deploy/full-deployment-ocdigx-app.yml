@@ -14,6 +14,10 @@ spec:
       labels:
         app: ocdigx-app
     spec:
+      securityContext:
+            runAsUser: 1001
+            runAsGroup: 1001
+            allowPrivilegeEscalation: false
       containers:
         - name: ocdigx-app
           image: "karthickconnects/ocdigx:mq.2"
