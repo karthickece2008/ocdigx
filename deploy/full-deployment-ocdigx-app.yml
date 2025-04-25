@@ -20,7 +20,6 @@ spec:
           imagePullPolicy: Always
           securityContext:
             runAsUser: oracle
-            runAsGroup: oracle
             allowPrivilegeEscalation: false
           ports:
             - containerPort: 8080
