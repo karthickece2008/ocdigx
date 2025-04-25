@@ -1,4 +1,3 @@
 #!/bin/sh
-
-# start the tomcat
-$CATALINA_HOME/bin/catalina.sh run
+echo "Starting Tomcat..."
+exec catalina.sh run

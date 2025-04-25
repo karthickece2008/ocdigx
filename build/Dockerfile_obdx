@@ -38,6 +38,18 @@ COPY ./configuration/entrypoint.sh /entrypoint.sh
 # Expose the necessary port
 EXPOSE 8080
 
-COPY startup.sh /opt/startup.sh
+COPY ./startup.sh /opt/startup.sh
 
-ENTRYPOINT /opt/startup.sh
+USER root
+
+RUN chmod -R g+rwx /opt
+
+RUN chown -R appuser /opt
+
+USER appuser
+
+WORKDIR $CATALINA_HOME
+
+#ENTRYPOINT ["/opt/startup.sh"]
+
+CMD /opt/startup.sh

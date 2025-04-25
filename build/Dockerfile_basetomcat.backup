@@ -4,8 +4,7 @@ FROM adoptopenjdk/openjdk11:jdk-11.0.16.1_1
 # Environment variables
       ENV TOMCAT_MAJOR=9 \
           TOMCAT_VERSION=9.0.104 \
-          CATALINA_HOME=/opt/tomcat \
-          PATH="$CATALINA_HOME/bin:$PATH"
+          CATALINA_HOME=/opt/tomcat
 
 # init
 RUN apt update && \
@@ -18,25 +17,25 @@ RUN mkdir -p /opt
 RUN curl -jkSL -o /tmp/apache-tomcat.tar.gz http://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz && \
     gunzip /tmp/apache-tomcat.tar.gz && \
     tar -C /opt -xf /tmp/apache-tomcat.tar && \
-    mv /opt/apache-tomcat-$TOMCAT_VERSION $CATALINA_HOME && \
-    chmod -R a+rwX $CATALINA_HOME
+    mv /opt/apache-tomcat-$TOMCAT_VERSION $CATALINA_HOME
+
 # cleanup
 RUN rm -rf /tmp/* /var/cache/apk/*
 
-# Optional: Copy a startup script if needed
 COPY startup.sh /opt/startup.sh
 
-#all permission
-RUN chmod -R a+rwX /opt
+# RUN addgroup -g root -S appuser
+RUN useradd -ms /bin/bash appuser
+RUN adduser appuser root
 
-# Use a non-root user (OpenShift will inject a random UID)
-USER 1001
+RUN chown -R appuser /opt
 
-# Expose Tomcat port
+RUN chmod -R g+rwx /opt
+
+WORKDIR $CATALINA_HOME
+
+USER appuser
+
 EXPOSE 8080
 
-# Optional: Custom entrypoint (if needed)
-#ENTRYPOINT ["/opt/startup.sh"]
-
-# Default CMD starts Tomcat
-CMD ["catalina.sh", "run"]
+#ENTRYPOINT /opt/startup.sh
