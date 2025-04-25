@@ -3,7 +3,7 @@ FROM karthickconnects/jdk:11-018
 RUN useradd -u 1001 -r -g 0 -d /opt/app -s /sbin/nologin appuser && \
     mkdir -p /opt/app && \
     chown -R 1001:0 /opt/app && \
-    chmod -R g+rw /opt/app
+    chmod -R 777 /opt/app
 
 ENV ACTIVEMQ_HOME /opt/activemq
 ENV JAVA_HOME /usr/java/jdk-11
@@ -17,7 +17,8 @@ RUN curl -jkSL -o /tmp/apache-activemq.tar.gz https://archive.apache.org/dist/ac
 # Copy the entire ActiveMQ directory structure that's already been extracted
 #COPY /tmp/apache-activemq /opt/activemq/
 
-RUN chown -R 1001:0 /opt/activemq
+RUN chown -R 1001:0 /opt/activemq && \
+    chmod -R 777 /opt
 EXPOSE 8161 61616 5672 61613 1883
 
 # Set the working directory
