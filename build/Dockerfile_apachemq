@@ -1,0 +1,26 @@
+FROM karthickconnects/jdk:11-018
+RUN groupadd -r oracle && useradd -r -g oracle -m -d /home/oracle -s /bin/bash oracle
+
+ENV ACTIVEMQ_HOME /opt/activemq
+ENV JAVA_HOME /usr/java/jdk-11
+ENV PATH $PATH:$JAVA_HOME/bin
+
+RUN curl -jkSL -o /tmp/apache-activemq.tar.gz https://archive.apache.org/dist/activemq/5.15.16/apache-activemq-5.15.16-bin.tar.gz && \
+    gunzip /tmp/apache-activemq.tar.gz && \
+    tar -C /opt -xf /tmp/apache-activemq.tar && \
+    mv /opt/apache-activemq-5.15.16 /optapache-activemq
+
+# Copy the entire ActiveMQ directory structure that's already been extracted
+#COPY /tmp/apache-activemq /opt/activemq/
+
+RUN chown -R oracle:oracle /opt/activemq
+EXPOSE 8161 61616 5672 61613 1883
+
+# Set the working directory
+WORKDIR /opt/activemq
+
+# Switch to oracle user
+USER oracle
+
+# Start ActiveMQ
+CMD ["/opt/activemq/bin/activemq", "console"]

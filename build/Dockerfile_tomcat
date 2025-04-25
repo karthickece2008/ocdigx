@@ -1,0 +1,28 @@
+# Use official Tomcat base (choose version as needed)
+FROM tomcat:9.0-jdk17-temurin
+
+# OpenShift runs as a random UID; we ensure the folder is accessible
+USER root
+
+# Create a writable directory for OpenShift (non-root user will run the container)
+RUN mkdir -p /opt/tomcat && \
+    chmod -R 777 /usr/local/tomcat && \
+    chmod -R 777 /opt/tomcat
+
+# Environment variables
+    ENV CATALINA_HOME=/usr/local/tomcat \
+    PATH="$CATALINA_HOME/bin:$PATH"
+
+# Optional: Add a startup script if needed
+COPY startup.sh /opt/startup.sh
+RUN chmod +x /opt/startup.sh
+
+# Switch to a non-root user (random UID) — required for OpenShift compatibility
+USER 1001
+
+# Expose the default Tomcat port
+EXPOSE 8080
+
+# Optional: use your custom script; otherwise, run Tomcat default
+ ENTRYPOINT ["/opt/startup.sh"]
+#CMD ["${CATALINA_HOME}/catalina.sh", "run"]
