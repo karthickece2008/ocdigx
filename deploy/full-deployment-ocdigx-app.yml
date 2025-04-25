@@ -19,7 +19,8 @@ spec:
           image: "karthickconnects/ocdigx:mq.1"
           imagePullPolicy: Always
           securityContext:
-            runAsUser: oracle
+            runAsUser: 998
+            runAsGroup: 995
             allowPrivilegeEscalation: false
           ports:
             - containerPort: 8080
