@@ -24,7 +24,7 @@ EXPOSE 8161 61616 5672 61613 1883
 WORKDIR /opt/activemq
 
 # Switch to oracle user
-USER 1001
+USER appuser
 
 # Start ActiveMQ
 CMD ["/opt/activemq/bin/activemq", "console"]
