@@ -18,7 +18,7 @@ RUN curl -jkSL -o /tmp/apache-activemq.tar.gz https://archive.apache.org/dist/ac
 #COPY /tmp/apache-activemq /opt/activemq/
 
 RUN chown -R 1001:0 /opt/activemq && \
-    chmod -R 777 /opt
+    chmod -R 755 /opt
 EXPOSE 8161 61616 5672 61613 1883
 
 # Set the working directory
