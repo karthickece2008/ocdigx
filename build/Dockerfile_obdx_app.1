@@ -1,8 +1,10 @@
-FROM karthickconnects/base-tomcat:latest
+FROM karthickconnects/ocdigx:tomcat.2
 
-USER appuser
-
-#RUN rm -rf ${CATALINA_HOME}/webapps/*.war
+# Adding user and usergroup
+RUN useradd -u 1001 -r -g 0 -d /usr/home/oracle -s /sbin/nologin oracle && \
+    mkdir -p /usr/home/oracle && \
+    chown -R 1001:0 /usr/home/oracle && \
+    chmod -R 755 /usr/home/oracle
 
 COPY ./deployable/wars/digx-shared-libs.war ${CATALINA_HOME}/webapps/
 COPY ./deployable/wars/digx-admin.war ${CATALINA_HOME}/webapps/
@@ -34,22 +36,18 @@ COPY ./configuration/tomcat-users.xml ${CATALINA_HOME}/conf/
 COPY ./configuration/logback.xml ${CATALINA_HOME}/conf/
 COPY ./configuration/entrypoint.sh /entrypoint.sh
 
+# Changing permission and owner of the tomcat and Java
+RUN chown -R 1001:0 $CATALINA_HOME && \
+    chmod -R 775 $CATALINA_HOME
 
 # Expose the necessary port
 EXPOSE 8080
 
-COPY ./startup.sh /opt/startup.sh
-
-USER root
-
-RUN chmod -R g+rwx /opt
-
-RUN chown -R appuser /opt
-
-USER appuser
-
+# Set the working directory
 WORKDIR $CATALINA_HOME
 
-#ENTRYPOINT ["/opt/startup.sh"]
+# Switch to oracle user
+USER oracle
 
-CMD /opt/startup.sh
+# Start tomcat - Make sure to update the appliacatin base path if CATALINA_HOME is changed
+#CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
