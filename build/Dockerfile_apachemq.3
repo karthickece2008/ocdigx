@@ -34,5 +34,5 @@ WORKDIR $ACTIVEMQ_HOME
 # Switch to oracle user
 USER oracle
 
-# Start ActiveMQ
-CMD ["$ACTIVEMQ_HOME/bin/activemq", "console"]
+# Start ActiveMQ - Make sure to update the appliacatin base path if ACTIVEMQ_HOME is changed
+CMD ["/opt/apache-activemq/bin/activemq", "console"]
