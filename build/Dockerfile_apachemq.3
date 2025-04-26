@@ -17,7 +17,7 @@ RUN useradd -u 1001 -r -g 0 -d /usr/home/oracle -s /sbin/nologin oracle && \
 
 
 # Create base directory and download and extract
-RUN mkdir -p $CATALINA_HOME && \
+RUN mkdir -p $ACTIVEMQ_HOME && \
     curl -jkSL -o /tmp/apache-activemq.tar.gz https://archive.apache.org/dist/activemq/${APACHE_VERSION}/apache-activemq-${APACHE_VERSION}-bin.tar.gz && \
     tar -xzf /tmp/apache-activemq.tar.gz --strip-components=1 -C $ACTIVEMQ_HOME && \
 

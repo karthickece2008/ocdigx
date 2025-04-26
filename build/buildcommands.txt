@@ -1,0 +1,5 @@
+docker build --no-cache -f Dockerfile_apachemq.2 -t karthickconnects/ocdigx:mq.2 .
+
+docker push karthickconnects/ocdigx:mq.2
+
+docker run --rm -it apache/activemq-classic:latest cat /etc/os-release
