@@ -44,8 +44,6 @@ COPY ./configuration/entrypoint.sh /entrypoint.sh
 USER root
 RUN chown -R oracle:root $CATALINA_HOME/webapps/* $CATALINA_HOME/lib/* ${CATALINA_HOME}/conf/* || true
 RUN chmod -R 775 $CATALINA_HOME/webapps/* $CATALINA_HOME/lib/* ${CATALINA_HOME}/conf/* || true
-RUN chown -R oracle:root $CATALINA_HOME/webapps/digx-shared-libs.war
-RUN chown -R 1001:0 $CATALINA_HOME/webapps/digx-admin.war
 
 # Expose the necessary port
 EXPOSE 8080
