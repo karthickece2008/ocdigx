@@ -6,6 +6,10 @@ FROM karthickconnects/ocdigx:tomcat.2
 #    chown -R 1001:0 /usr/home/oracle && \
 #    chmod -R 755 /usr/home/oracle
 
+## !!!!! Alert: Add only for Development environments !!!!!! ##
+# !!! Added for enabling tomcat manager url for Debugging !!!##
+RUN sed -i 's/127\\\.d\+\\\.d\+\\\.d\+/.\*/g' $CATALINA_HOME/webapps/manager/META-INF/context.xml
+
 COPY ./deployable/wars/digx-shared-libs.war ${CATALINA_HOME}/webapps/
 COPY ./deployable/wars/digx-admin.war ${CATALINA_HOME}/webapps/
 COPY ./deployable/wars/digx-infra.war ${CATALINA_HOME}/webapps/
