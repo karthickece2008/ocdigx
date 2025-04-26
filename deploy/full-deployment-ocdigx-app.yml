@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ocdigx-app-app
+  name: ocdigx-app
   labels:
-    app: ocdigx-app-app
+    app: ocdigx-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: ocdigx-app-app
+      app: ocdigx-app
   template:
     metadata:
       labels:
-        app: ocdigx-app-app
+        app: ocdigx-app
     spec:
       containers:
-        - name: ocdigx-app-app
-          image: "karthickconnects/ocdigx:mq.3"
+        - name: ocdigx-app
+          image: "karthickconnects/ocdigx:tomcat.1"
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -27,34 +27,34 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ocdigx-app-app-svc
+  name: ocdigx-app-svc
   labels:
-    app: ocdigx-app-app-svc
+    app: ocdigx-app-svc
 spec:
   type: ClusterIP
   ports:
-  - name: ocdigx-app-app
+  - name: ocdigx-app
     port: 8080
     protocol: TCP
     targetPort: 8080
   selector:
-    app: ocdigx-app-app
+    app: ocdigx-app
 ---
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: ocdigx-app-app-route
+  name: ocdigx-app-route
   labels:
-    app: ocdigx-app-app-svc
+    app: ocdigx-app-svc
 spec:
   # hostname: foo.apps.CLUSTER.ccs.ornl.gov
   port:
-    targetPort: ocdigx-app-app
+    targetPort: ocdigx-app
   tls:
     insecureEdgeTerminationPolicy: Redirect
     termination: edge
   to:
     kind: Service
-    name: ocdigx-app-app-svc
+    name: ocdigx-app-svc
     weight: 100
   wildcardPolicy: None
