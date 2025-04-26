@@ -25,6 +25,9 @@ RUN mkdir -p $ACTIVEMQ_HOME && \
 RUN chown -R 1001:0 $ACTIVEMQ_HOME $JAVA_HOME && \
     chmod -R 775 $ACTIVEMQ_HOME $JAVA_HOME
 
+# Cleanup
+RUN rm -rf /tmp/apache-activemq.tar.gz
+
 #Exposing the port for activemq
 EXPOSE 8161 61616 5672 61613 1883
 
