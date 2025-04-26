@@ -41,6 +41,7 @@ COPY ./configuration/logback.xml ${CATALINA_HOME}/conf/
 COPY ./configuration/entrypoint.sh /entrypoint.sh
 
 # Changing permission and owner of the tomcat and Java
+USER root
 RUN chown -R oracle:root $CATALINA_HOME/webapps/* $CATALINA_HOME/lib/* ${CATALINA_HOME}/conf/* || true
 RUN chmod -R 775 $CATALINA_HOME/webapps/* $CATALINA_HOME/lib/* ${CATALINA_HOME}/conf/* || true
 RUN chown -R oracle:root $CATALINA_HOME/webapps/digx-shared-libs.war
