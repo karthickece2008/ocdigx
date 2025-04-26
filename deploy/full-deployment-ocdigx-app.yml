@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: ocdigx-app
-          image: "karthickconnects/ocdigx:tomcat.1"
+          image: "karthickconnects/ocdigx:tomcat.2"
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
