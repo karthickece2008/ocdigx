@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: ocdigx-ui
-          image: "karthickconnects/ocdigx:ohs.1"
+          image: "karthickconnects/ocdigx:ohs.2"
           imagePullPolicy: Always
           ports:
             - containerPort: 7777
