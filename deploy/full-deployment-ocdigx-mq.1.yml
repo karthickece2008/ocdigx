@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: ocdigx-mq
-        image: "karthickconnects/ocdigx:mq.3"
+        image: "karthickconnects/ocdigx:mq.4"
         imagePullPolicy: Always
         ports:
         - containerPort: 61616
