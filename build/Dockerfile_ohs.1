@@ -25,8 +25,8 @@ RUN echo 'username=weblogic'>>${BOOTDIR}/domain.properties
 RUN echo 'password=Welcome1!'>>${BOOTDIR}/domain.properties
 
 # Changing permission and owner of the tomcat and Java
-RUN chown -R 1001:0 $BOOTDIR $BAESDIR && \
-    chmod -R 775 $BOOTDIR $BAESDIR
+RUN chown -R ${USERNAME}:root $BASEDIR && \
+    chmod -R 775 $BASEDIR
 
 #Exposing the port for tomcat
 EXPOSE 7777 4443
