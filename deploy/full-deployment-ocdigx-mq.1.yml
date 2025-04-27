@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ocdigx-mq
+  labels:
+    app: ocdigx-mq
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ocdigx-mq
+  template:
+    metadata:
+      labels:
+        app: ocdigx-mq
+    spec:
+      containers:
+      - name: ocdigx-mq
+          image: "karthickconnects/ocdigx:mq.3"
+          imagePullPolicy: Always
+        ports:
+        - containerPort: 61616   # TCP Port for clients
+        - containerPort: 8161    # Web Console
+        env:
+        - name: ocdigx-mq_ADMIN_LOGIN
+          value: "admin"
+        - name: ocdigx-mq_ADMIN_PASSWORD
+          value: "admin"
+      imagePullSecrets:
+        - name: karthickconnects
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ocdigx-mq-svc
+  labels:
+    app: ocdigx-mq-svc
+spec:
+  type: ClusterIP
+  ports:
+  - name: ocdigx-mq-tcp
+    port: 61616
+    targetPort: 61616
+  - name: ocdigx-mq-web
+    port: 8161
+    targetPort: 8161
+  selector:
+    app: ocdigx-mq
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: ocdigx-mq-route
+  labels:
+    app: ocdigx-mq-svc
+spec:
+  # hostname: foo.apps.CLUSTER.ccs.ornl.gov
+  port:
+    targetPort: ocdigx-mq-web
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: ocdigx-mq-svc
+    weight: 100
+  wildcardPolicy: None

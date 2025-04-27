@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ocdigx-ui
+  labels:
+    app: ocdigx-ui
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ocdigx-ui
+  template:
+    metadata:
+      labels:
+        app: ocdigx-ui
+    spec:
+      containers:
+        - name: ocdigx-ui
+          image: "karthickconnects/ocdigx:ohs.1"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 7777
+      imagePullSecrets:
+        - name: karthickconnects
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ocdigx-ui-svc
+  labels:
+    app: ocdigx-ui-svc
+spec:
+  type: ClusterIP
+  ports:
+  - name: ocdigx-ui
+    port: 7777
+    protocol: TCP
+    targetPort: 7777
+  selector:
+    app: ocdigx-ui
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ocdigx-ui-svc-ext
+  labels:
+    app: ocdigx-ui-svc-ext
+spec:
+  type: ClusterIP
+  ports:
+  - name: ocdigx-ui-ext
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: ocdigx-ui    
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: ocdigx-ui-route
+  labels:
+    app: ocdigx-ui-svc-ext
+spec:
+  # hostname: foo.apps.CLUSTER.ccs.ornl.gov
+  port:
+    targetPort: ocdigx-ui-ext
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: ocdigx-ui-svc-ext
+    weight: 100
+  wildcardPolicy: None
