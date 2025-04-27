@@ -16,18 +16,18 @@ spec:
     spec:
       containers:
       - name: ocdigx-mq
-          image: "karthickconnects/ocdigx:mq.3"
-          imagePullPolicy: Always
-            ports:
-            - containerPort: 61616
-            - containerPort: 8161
-          env:
-            - name: ocdigx-mq_ADMIN_LOGIN
-              value: "admin"
-            - name: ocdigx-mq_ADMIN_PASSWORD
-              value: "admin"
+        image: "karthickconnects/ocdigx:mq.3"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 61616
+        - containerPort: 8161
+        env:
+        - name: ocdigx-mq_ADMIN_LOGIN
+          value: "admin"
+        - name: ocdigx-mq_ADMIN_PASSWORD
+          value: "admin"
       imagePullSecrets:
-        - name: karthickconnects
+      - name: karthickconnects
 ---
 apiVersion: v1
 kind: Service
