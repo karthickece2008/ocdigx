@@ -49,9 +49,9 @@ spec:
   type: ClusterIP
   ports:
   - name: ocdigx-ui-ext
-    port: 8080
+    port: 7777
     protocol: TCP
-    targetPort: 8080
+    targetPort: 7777
   selector:
     app: ocdigx-ui    
 ---
