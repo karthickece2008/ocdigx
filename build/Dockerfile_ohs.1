@@ -1,0 +1,37 @@
+# Use any jdk image
+container-registry.oracle.com/middleware/ohs:14.1.2.0-jdk17-ol8
+
+USER root
+
+# Arguments
+ARG USERNAME=oracle
+ARG UID=1001
+
+# Environment variables
+ENV BOOTDIR /u01/oracle/bootdir
+ENV PATH $PATH:$JAVA_HOME/bin
+#ENV JAVA_HOME /u01/jdk
+
+# Adding user and usergroup
+RUN id -u ${USERNAME} 2>/dev/null || useradd -u 1001 -r -g 0 -d /usr/home/${USERNAME} -s /bin/bash ${USERNAME} && \
+    mkdir -p /usr/home/${USERNAME} && \
+    chown -R 1001:0 /usr/home/${USERNAME} && \
+    chmod -R 755 /usr/home/${USERNAME}
+
+# Only for Developement environemts
+RUN mkdir -p $BOOTDIR
+RUN echo "username=admin">>${BOOTDIR}/domain.properties
+RUN echo "password=admin">>${BOOTDIR}/domain.properties
+
+# Changing permission and owner of the tomcat and Java
+RUN chown -R 1001:0 $BOOTDIR && \
+    chmod -R 775 $BOOTDIR
+
+#Exposing the port for tomcat
+EXPOSE 9999 7777 4443
+
+# Switch to oracle user
+USER oracle
+
+# Start tomcat - Make sure to update the appliacatin base path if CATALINA_HOME is changed
+#CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]

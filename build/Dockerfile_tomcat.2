@@ -11,7 +11,7 @@ ENV TOMCAT_MAJOR 9
 ENV TOMCAT_VERSION 9.0.104
 
 # Adding user and usergroup
-RUN useradd -u 1001 -r -g 0 -d /usr/home/oracle -s /sbin/nologin oracle && \
+RUN useradd -u 1001 -r -g 0 -d /usr/home/oracle -s /bin/bash oracle && \
     mkdir -p /usr/home/oracle && \
     chown -R 1001:0 /usr/home/oracle && \
     chmod -R 755 /usr/home/oracle
