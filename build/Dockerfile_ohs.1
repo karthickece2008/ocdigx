@@ -20,15 +20,15 @@ RUN id -u ${USERNAME} 2>/dev/null || useradd -u 1001 -r -g 0 -d /usr/home/${USER
 
 # Only for Developement environemts
 RUN mkdir -p $BOOTDIR
-RUN echo "username=admin">>${BOOTDIR}/domain.properties
-RUN echo "password=admin">>${BOOTDIR}/domain.properties
+RUN echo 'username=weblogic'>>${BOOTDIR}/domain.properties
+RUN echo 'password=Welcome1!'>>${BOOTDIR}/domain.properties
 
 # Changing permission and owner of the tomcat and Java
 RUN chown -R 1001:0 $BOOTDIR && \
     chmod -R 775 $BOOTDIR
 
 #Exposing the port for tomcat
-EXPOSE 9999 7777 4443
+EXPOSE 7777 4443
 
 # Switch to oracle user
 USER oracle
