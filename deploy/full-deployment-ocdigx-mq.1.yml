@@ -19,13 +19,13 @@ spec:
           image: "karthickconnects/ocdigx:mq.3"
           imagePullPolicy: Always
         ports:
-        - containerPort: 61616   # TCP Port for clients
-        - containerPort: 8161    # Web Console
-#        env:
-#        - name: ocdigx-mq_ADMIN_LOGIN
-#          value: "admin"
-#        - name: ocdigx-mq_ADMIN_PASSWORD
-#          value: "admin"
+          - containerPort: 61616   # TCP Port for clients
+          - containerPort: 8161    # Web Console
+        env:
+          - name: ocdigx-mq_ADMIN_LOGIN
+            value: "admin"
+          - name: ocdigx-mq_ADMIN_PASSWORD
+            value: "admin"
       imagePullSecrets:
         - name: karthickconnects
 ---
